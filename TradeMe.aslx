@@ -1,0 +1,1001 @@
+<!--Saved by Quest 5.8.6836.13983-->
+<asl version="580">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <game name="TradeMe">
+    <gameid>83151f88-849b-47ea-bf6d-81f2a1e184e0</gameid>
+    <version>1.0</version>
+    <firstpublished>2020</firstpublished>
+    <arrStock type="stringlist" />
+    <intBankAccount type="int">0</intBankAccount>
+    <arrStockOwned type="stringlist" />
+    <intCash type="int">20000</intCash>
+    <attr name="INT_BASE_INTERVAL" type="int">0</attr>
+    <start type="script">
+    </start>
+  </game>
+  <object name="BankEntrance">
+    <inherit name="editor_room" />
+    <isroom />
+    <description>The central bank is a historic building that has stood here longer than most of its employees or customers.</description>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix type="string"></prefix>
+    <suffix type="string"></suffix>
+    <descprefix>You are at the</descprefix>
+    <alias>entrance of Central Bank</alias>
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+      <intGameLevel type="int">99</intGameLevel>
+      <intMarketLevel type="int">0</intMarketLevel>
+      <intBankAccount type="int">0</intBankAccount>
+      <intCash type="int">0</intCash>
+      <arrStockOwned type="stringlist" />
+    </object>
+    <exit alias="west" to="MarketEntrance">
+      <inherit name="westdirection" />
+    </exit>
+    <exit name="BankEntranceIn" alias="in" to="Bank">
+      <inherit name="indirection" />
+    </exit>
+  </object>
+  <object name="MarketEntrance">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <descprefix>You are at the</descprefix>
+    <description>The stock market is a modern building, and a large bronze statue of a bull, symbolizes the rich that it has served over the years.</description>
+    <alias>entrance of Stock Market</alias>
+    <enter type="script">
+    </enter>
+    <exit alias="east" to="BankEntrance">
+      <inherit name="eastdirection" />
+    </exit>
+    <exit name="MarketEntranceIn" alias="in" to="Market">
+      <inherit name="indirection" />
+      <locked type="boolean">false</locked>
+    </exit>
+  </object>
+  <object name="Market">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <descprefix>You are in the</descprefix>
+    <description>The excitement is palpable inside here, men adorned in their business suits walk briskly past you.</description>
+    <alias>Stock Market</alias>
+    <enter type="script">
+      msg ("Stock Market Index is " + StockPortfolio(benchmark) / 100)
+      msg ("Listed Stocks: " + ArrToStr(game.arrStock))
+    </enter>
+    <exit alias="out" to="MarketEntrance">
+      <inherit name="outdirection" />
+    </exit>
+    <exit alias="north" to="Apple">
+      <inherit name="northdirection" />
+    </exit>
+    <exit alias="south" to="Lemon">
+      <inherit name="southdirection" />
+    </exit>
+    <exit alias="east" to="Guava">
+      <inherit name="eastdirection" />
+    </exit>
+  </object>
+  <object name="Apple">
+    <inherit name="editor_room" />
+    <alias>Apple Stock Room</alias>
+    <intPriceChg type="int">0</intPriceChg>
+    <intPrice type="int">100</intPrice>
+    <arrPriceHistory type="stringlist" />
+    <arrPriceFutures type="stringlist" />
+    <enter type="script">
+      StockLook (Apple)
+    </enter>
+    <exit alias="south" to="Market">
+      <inherit name="southdirection" />
+    </exit>
+    <command>
+      <pattern>h</pattern>
+      <script>
+        msg ("Commands: bal, (b)uy, (s)ell")
+      </script>
+    </command>
+    <command>
+      <pattern>b</pattern>
+      <script>
+        UserStockBuy ("Apple")
+      </script>
+    </command>
+    <command>
+      <pattern>bal</pattern>
+      <script>
+        msg ("You own " + StockBalance("Apple") + " shares of Apple stock.")
+      </script>
+    </command>
+    <command>
+      <pattern>s</pattern>
+      <script>
+        UserStockSell ("Apple")
+      </script>
+    </command>
+  </object>
+  <object name="Lemon">
+    <inherit name="editor_room" />
+    <alias>Lemon Stock Room</alias>
+    <intPrice type="string"></intPrice>
+    <arrPriceFutures type="stringlist" />
+    <arrPriceHistory type="stringlist" />
+    <intPriceChg type="int">0</intPriceChg>
+    <enter type="script">
+      StockLook (Lemon)
+    </enter>
+    <exit alias="north" to="Market">
+      <inherit name="northdirection" />
+    </exit>
+    <command>
+      <pattern>h</pattern>
+      <script>
+        msg ("Commands: bal, (b)uy, (s)ell")
+      </script>
+    </command>
+    <command>
+      <pattern>bal</pattern>
+      <script>
+        msg ("You own " + StockBalance("Lemon") + " shares of Lemon stock.")
+      </script>
+    </command>
+    <command>
+      <pattern>b</pattern>
+      <script>
+        UserStockBuy ("Lemon")
+      </script>
+    </command>
+    <command>
+      <pattern>s</pattern>
+      <script>
+        UserStockSell ("Lemon")
+      </script>
+    </command>
+  </object>
+  <object name="Guava">
+    <inherit name="editor_room" />
+    <intPriceChg type="int">0</intPriceChg>
+    <arrPriceFutures type="stringlist" />
+    <arrPriceHistory type="stringlist" />
+    <intPrice type="int">0</intPrice>
+    <enter type="script">
+      StockLook (Guava)
+    </enter>
+    <exit alias="west" to="Market">
+      <inherit name="westdirection" />
+    </exit>
+    <command>
+      <pattern>h</pattern>
+      <script>
+        msg ("Commands: bal, (b)uy, (s)ell")
+      </script>
+    </command>
+    <command>
+      <pattern>bal</pattern>
+      <script>
+        msg ("You own " + StockBalance("Guava") + " shares of Guava stock.")
+      </script>
+    </command>
+    <command>
+      <pattern>b</pattern>
+      <script>
+        UserStockBuy ("Guava")
+      </script>
+    </command>
+    <command>
+      <pattern>s</pattern>
+      <script>
+        UserStockSell ("Guava")
+      </script>
+    </command>
+  </object>
+  <object name="benchmark">
+    <inherit name="editor_object" />
+    <intCash type="int">0</intCash>
+    <intBankAccount type="int">0</intBankAccount>
+    <arrStockOwned type="stringlist" />
+  </object>
+  <object name="Bank">
+    <inherit name="editor_room" />
+    <alias>Central Bank</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <descprefix>You are in the</descprefix>
+    <description>You stand under a large dome, with murals of the four elements. The guard watches you intently.</description>
+    <enter type="script">
+      msg ("Bank Deposit Rate: $" + game.intBankRate + " per period for each $100")
+    </enter>
+    <exit alias="out" to="BankEntrance">
+      <inherit name="outdirection" />
+    </exit>
+    <command>
+      <pattern>h</pattern>
+      <script>
+        msg ("Commands: bal, (d)eposit, (w)ithdraw")
+      </script>
+    </command>
+    <command>
+      <pattern>bal</pattern>
+      <script>
+        BankBalance
+      </script>
+    </command>
+    <command>
+      <pattern>d</pattern>
+      <script><![CDATA[
+        msg ("How much to deposit? (1-" + player.intCash + ")")
+        get input {
+          if (IsInt(result) = false) {
+            msg ("User cancel - unknown amount")
+          }
+          else {
+            intAmt = ToInt(result)
+            if (intAmt <= 0) {
+              msg ("Hmmm.. would you like to withdraw?")
+              msg ("User cancel")
+            }
+            else if (intAmt > player.intCash) {
+              msg ("User cancel - insufficient cash")
+            }
+            else {
+              BankDeposit (player, intAmt)
+              msg ("Successful - it has been a pleasure!")
+              BankBalance
+            }
+          }
+        }
+      ]]></script>
+    </command>
+    <command>
+      <pattern>w</pattern>
+      <script><![CDATA[
+        msg ("How much to withdraw? (max: " + player.intBankAccount + ")")
+        get input {
+          if (IsInt(result) = false) {
+            msg ("User cancel - unknown amount")
+          }
+          else {
+            intAmt = ToInt(result)
+            if (intAmt <= 0) {
+              msg ("Hmmm.. would you like to deposit?")
+              msg ("User cancel")
+            }
+            else if (intAmt > player.intBankAccount) {
+              msg ("User cancel - insufficient bank balance")
+            }
+            else {
+              BankWithdraw (player, intAmt)
+              msg ("Successful - it has been a pleasure!")
+              BankBalance
+            }
+          }
+        }
+      ]]></script>
+    </command>
+  </object>
+  <command>
+    <pattern>h</pattern>
+    <script>
+      msg ("Commands: (a)sset, (c)ash")
+    </script>
+  </command>
+  <command>
+    <pattern>a</pattern>
+    <script>
+      msg ("Your portfolio value is $" + StockPortfolio(player))
+      msg ("Your cash is $" + player.intCash)
+    </script>
+  </command>
+  <command>
+    <pattern>c</pattern>
+    <script>
+      msg ("Your cash is $" + player.intCash)
+    </script>
+  </command>
+  <function name="SectorRiseOneFlat">
+    intRandom = GetRandomInt(0, ListCount(game.arrStock) - 1)
+    intIndex = 0
+    //
+    // Assert - All stock prices rise except one random flat
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      if (intIndex = intRandom) {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-1,1)))
+      }
+      else {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(0,4)))
+      }
+      intIndex = intIndex + 1
+    }
+  </function>
+  <function name="EndDayCloseRoom">
+    //
+    // Assert - Night fall Kick player out
+    EndDayKickPlayer (Bank, BankEntrance)
+    EndDayKickPlayer (Apple, MarketEntrance)
+    EndDayKickPlayer (Guava, MarketEntrance)
+    EndDayKickPlayer (Lemon, MarketEntrance)
+    EndDayKickPlayer (Market, MarketEntrance)
+    //
+    // Assert - Lock Exit
+    LockExit (BankEntranceIn)
+    LockExit (MarketEntranceIn)
+  </function>
+  <function name="EndDayPublish">
+    //
+    // Assert - Publish one random price for all stocks
+    // Price is pushed into bottom of list arrPriceFutures
+    if (game.intBankRate = 1) {
+      if (game.intSectorRate = 1) {
+        MsgGame (99, "SectorRise")
+        SectorRise
+      }
+      else if (game.intSectorRate = 2) {
+        MsgGame (99, "SectorRiseOneFlat")
+        SectorRiseOneFlat
+      }
+      else {
+        MsgGame (99, "SectorRiseOneFall")
+        SectorRiseOneFall
+      }
+    }
+    else if (game.intBankRate = 2) {
+      if (game.intSectorRate = 1) {
+        MsgGame (99, "SectorFlatOneRise")
+        SectorFlatOneRise
+      }
+      else if (game.intSectorRate = 2) {
+        MsgGame (99, "SectorFlat")
+        SectorFlat
+      }
+      else {
+        MsgGame (99, "SectorFlatOneFall")
+        SectorFlatOneFall
+      }
+    }
+    else if (game.intBankRate = 3) {
+      if (game.intSectorRate = 1) {
+        MsgGame (99, "SectorFallOneRise")
+        SectorFallOneRise
+      }
+      else if (game.intSectorRate = 2) {
+        MsgGame (99, "SectorFallOneFlat")
+        SectorFallOneFlat
+      }
+      else {
+        MsgGame (99, "SectorFall")
+        SectorFall
+      }
+    }
+  </function>
+  <function name="SectorRise">
+    //
+    // Assert - All stock prices rise
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      list add (objStock.arrPriceFutures, ToString(GetRandomInt(0,4)))
+    }
+  </function>
+  <function name="SectorFlat">
+    //
+    // Assert - All stock prices flat
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      list add (objStock.arrPriceFutures, ToString(GetRandomInt(-1,1)))
+    }
+  </function>
+  <function name="SectorFall">
+    //
+    // Assert - All stock prices fall
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      list add (objStock.arrPriceFutures, ToString(GetRandomInt(-4,-0)))
+    }
+  </function>
+  <function name="EndPeriodPublish"><![CDATA[
+    //
+    // Assert - 20% chance for BankRate equals 3
+    intRandom = GetRandomInt(0,9)
+    if (intRandom >= 6) {
+      game.intBankRate = 1
+      game.intBankPeriodLength = 7
+    }
+    else if (intRandom >= 2) {
+      game.intBankRate = 2
+      game.intBankPeriodLength = 5
+    }
+    else {
+      game.intBankRate = 3
+      game.intBankPeriodLength = 3
+    }
+    game.intSectorRate = GetRandomInt(1,3)
+    SetTimerInterval (TimePeriod, game.INT_BASE_INTERVAL * 5 * game.intBankPeriodLength)
+    MsgGame (99, "BankPeriod = " + game.intBankPeriod)
+    MsgGame (99, "BankPeriodLength = " + game.intBankPeriodLength)
+    MsgGame (99, "BankRate = " + game.intBankRate)
+    MsgGame (99, "SectorRate = " + game.intSectorRate)
+  ]]></function>
+  <function name="EndNightSubscribe">
+    //
+    // Assert - Subscribe to future price for all stocks
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      StockSubscribe (objStock)
+    }
+  </function>
+  <function name="ArrToInt" parameters="arrList" type="int"><![CDATA[
+    intRet = 0
+    if (ListCount(arrList) > 0) {
+      strRet = ListItem(arrList, 0)
+      intRet = ToInt(strRet)
+    }
+    return (intRet)
+  ]]></function>
+  <function name="StockSubscribe" parameters="objStock"><![CDATA[
+    //
+    // Price is popped out from top of list arrPriceFutures
+    objStock.intPriceChg = ArrToInt(objStock.arrPriceFutures)
+    //
+    // Assert - stock price > 0
+    intPrice = objStock.intPrice + objStock.intPriceChg
+    if (intPrice < 1) {
+      objStock.intPriceChg = 0
+    }
+    //
+    // Price is pushed into bottom of list arrPriceHistory
+    list add (objStock.arrPriceHistory, ToString(objStock.intPrice))
+    //
+    // Update stock price
+    objStock.intPrice = objStock.intPrice + objStock.intPriceChg
+    //
+    // Remove from top of list
+    list remove (objStock.arrPriceFutures, ToString(objStock.intPriceChg))
+  ]]></function>
+  <function name="EndNightOpenRoom">
+    //
+    // Assert - Unlock Exit
+    UnlockExit (BankEntranceIn)
+    UnlockExit (MarketEntranceIn)
+  </function>
+  <function name="StockStart">
+    //
+    // Assert - Create a global array with stock names
+    list add (game.arrStock, "Apple")
+    list add (game.arrStock, "Guava")
+    list add (game.arrStock, "Lemon")
+    //
+    // Assert - Set initial stock price
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      objStock.intPrice = 100
+    }
+  </function>
+  <function name="StockLook" parameters="objStock"><![CDATA[
+    sign = ""
+    if (objStock.intPriceChg >= 0) {
+      sign = "+"
+    }
+    msg (objStock.name + " stock price = $" + objStock.intPrice + "  High: $" + StockHigh(objStock.name) + "  Low: $" + StockLow(objStock.name))
+    MsgGame (99, "Price Futures: " + ArrToStr(objStock.arrPriceFutures))
+    MsgGame (99, "Price History: " + ArrToStr(objStock.arrPriceHistory))
+  ]]></function>
+  <function name="EndDayKickPlayer" parameters="objInside, objOutside">
+    //
+    // Assert - Check if player inside, kick outside
+    if (Contains (objInside,player)) {
+      msg ("Guard shouts, \"COME BACK TOMORROW\", and kicks you out!")
+      MoveObject (player, objOutside)
+    }
+  </function>
+  <function name="SectorRiseOneFall">
+    intRandom = GetRandomInt(0, ListCount(game.arrStock) - 1)
+    intIndex = 0
+    //
+    // Assert - All stock prices rise except one random fall
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      if (intIndex = intRandom) {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-4,0)))
+      }
+      else {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(0,4)))
+      }
+      intIndex = intIndex + 1
+    }
+  </function>
+  <function name="SectorFlatOneRise">
+    intRandom = GetRandomInt(0, ListCount(game.arrStock) - 1)
+    intIndex = 0
+    //
+    // Assert - All stock prices flat except one random rise
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      if (intIndex = intRandom) {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(0,4)))
+      }
+      else {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-1,1)))
+      }
+      intIndex = intIndex + 1
+    }
+  </function>
+  <function name="SectorFlatOneFall">
+    intRandom = GetRandomInt(0, ListCount(game.arrStock) - 1)
+    intIndex = 0
+    //
+    // Assert - All stock prices flat except one random fall
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      if (intIndex = intRandom) {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-4,0)))
+      }
+      else {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-1,1)))
+      }
+      intIndex = intIndex + 1
+    }
+  </function>
+  <function name="SectorFallOneFlat">
+    intRandom = GetRandomInt(0, ListCount(game.arrStock) - 1)
+    intIndex = 0
+    //
+    // Assert - All stock prices fall except one random flat
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      if (intIndex = intRandom) {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-1,1)))
+      }
+      else {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-4,-0)))
+      }
+      intIndex = intIndex + 1
+    }
+  </function>
+  <function name="SectorFallOneRise">
+    intRandom = GetRandomInt(0, ListCount(game.arrStock) - 1)
+    intIndex = 0
+    //
+    // Assert - All stock prices fall except one random rise
+    foreach (strStock, game.arrStock) {
+      objStock = GetObject (strStock)
+      if (intIndex = intRandom) {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(0,4)))
+      }
+      else {
+        list add (objStock.arrPriceFutures, ToString(GetRandomInt(-4,0)))
+      }
+      intIndex = intIndex + 1
+    }
+  </function>
+  <function name="StockStartLag">
+    //
+    // Assert - Create a delay in bank rate and stock prices
+    EndPeriodPublish
+    for (i, 1, game.intBankPeriodLength) {
+      EndDayPublish
+      EndNightSubscribe
+    }
+    EndPeriodPublish
+    for (i, 1, game.intBankPeriodLength) {
+      EndDayPublish
+      EndNightSubscribe
+    }
+    EndPeriodPublish
+    for (i, 1, game.intBankPeriodLength) {
+      EndDayPublish
+    }
+    EndPeriodPublish
+    for (i, 1, game.intBankPeriodLength) {
+      EndDayPublish
+    }
+  </function>
+  <function name="MsgGame" parameters="intLevel, strMsg">
+    if (intLevel = player.intGameLevel) {
+      msg (strMsg)
+    }
+  </function>
+  <function name="MsgMarket" parameters="intLevel"><![CDATA[
+    if (intLevel >= player.intMarketLevel) {
+      msg (strMsg)
+    }
+  ]]></function>
+  <function name="ArrToStr" parameters="arrList" type="string"><![CDATA[
+    strRet = ""
+    if (ListCount(arrList) < 1) {
+      return (strRet)
+    }
+    intItem = 0
+    foreach (strItem, arrList) {
+      strRet = strRet + strItem
+      intItem = intItem + 1
+      if (intItem < ListCount(arrList)) {
+        strRet = strRet + ","
+      }
+    }
+    return (strRet)
+  ]]></function>
+  <function name="BankSubscribe" parameters="objPlayer">
+    //
+    // For every $100
+    intFactor = Truncate(objPlayer.intBankAccount / 100)
+    //
+    // Assert - Calculate Interest
+    intInterest = game.intBankRate * intFactor
+    //
+    // Add Bank Interest
+    objPlayer.intBankAccount = objPlayer.intBankAccount + intInterest
+  </function>
+  <function name="EndPeriodSubscribe">
+    //
+    // Assert - Subscribe to bank interest for players
+    BankSubscribe (game)
+    BankSubscribe (player)
+    MsgGame (99, "Benchmark Stock Index: " + StockPortfolio(benchmark))
+    MsgGame (99, "Benchmark Bank Account: " + benchmark.intBankAccount)
+    MsgGame (99, "Benchmark Cash: " + benchmark.intCash)
+  </function>
+  <function name="StockBuy" parameters="objPlayer, objStock, intUnit" type="boolean"><![CDATA[
+    //
+    // Find stock
+    strFound = ""
+    intLoop = -1
+    foreach (strStock, game.arrStock) {
+      intLoop = intLoop + 1
+      if (strStock = objStock.name) {
+        strFound = strStock
+        intFound = intLoop
+      }
+    }
+    if (intFound < 0 ) {
+      return (false)
+    }
+    //
+    // Calculate total cost
+    intPrice = objStock.intPrice
+    intTotal = intUnit * intPrice
+    //
+    // Assert player cash is sufficient
+    if (intTotal > objPlayer.intCash) {
+      return (false)
+    }
+    //
+    // Assert deduct cash from player
+    objPlayer.intCash = objPlayer.intCash - intTotal
+    //
+    // Assert add StockOwned to player
+    strOwned = ListItem (objPlayer.arrStockOwned, intFound)
+    intOwned = ToInt(strOwned)
+    intOwned = intOwned + intUnit
+    ArrReplace (objPlayer.arrStockOwned, intOwned, intFound)
+    return (true)
+  ]]></function>
+  <function name="PlayerStart" parameters="objPlayer, intCash">
+    //
+    // Assert - Set stock owned
+    foreach (strStock, game.arrStock) {
+      list add (objPlayer.arrStockOwned, "0")
+    }
+    objPlayer.intCash = intCash
+  </function>
+  <function name="ArrReplace" parameters="arrList, strNew, intPos">
+    intIndex = 0
+    arrRet = NewList()
+    arrDel = NewList()
+    //
+    // create new list
+    foreach (strItem, arrList) {
+      if (intIndex = intPos) {
+        list add (arrRet, strNew)
+      }
+      else {
+        list add (arrRet, strItem)
+      }
+      list add (arrDel, strItem)
+      intIndex = intIndex + 1
+    }
+    //
+    // delete old list
+    foreach (strItem, arrDel) {
+      list remove (arrList, strItem)
+    }
+    //
+    // copy list
+    foreach (strItem, arrRet) {
+      list add (arrList, ToString(strItem))
+    }
+  </function>
+  <function name="BankDeposit" parameters="objPlayer, intTotal" type="boolean"><![CDATA[
+    //
+    // Assert player cash is sufficient
+    if (intTotal > objPlayer.intCash) {
+      return (false)
+    }
+    //
+    // Assert deduct cash from player
+    objPlayer.intCash = objPlayer.intCash - intTotal
+    //
+    // Assert add BankAccount to player
+    objPlayer.intBankAccount = objPlayer.intBankAccount + intTotal
+    return (true)
+  ]]></function>
+  <function name="StockPortfolio" parameters="objPlayer" type="int"><![CDATA[
+    intRet = 0
+    intCount = ListCount(game.arrStock)
+    if (intCount < 1) {
+      return (intRet)
+    }
+    //
+    // Assert - Calculate value for each stock
+    for (i, 0, intCount - 1) {
+      strStock = ListItem(game.arrStock, i)
+      objStock = GetObject (strStock)
+      strOwned = ListItem(objPlayer.arrStockOwned, i)
+      intOwned = ToInt(strOwned)
+      intRet = intRet + (objStock.intPrice * intOwned)
+    }
+    return (intRet)
+  ]]></function>
+  <function name="BankBalance">
+    msg ("Your bank account has $" + player.intBankAccount)
+  </function>
+  <function name="BankWithdraw" parameters="objPlayer, intTotal" type="boolean"><![CDATA[
+    //
+    // Assert player bank is sufficient
+    if (intTotal > objPlayer.intBankAccount) {
+      return (false)
+    }
+    //
+    // Assert deduct cash from player
+    objPlayer.intBankAccount = objPlayer.intBankAccount - intTotal
+    //
+    // Assert add BankAccount to player
+    objPlayer.intCash = objPlayer.intCash + intTotal
+    return (true)
+  ]]></function>
+  <function name="UserStockBuy" parameters="strStock"><![CDATA[
+    objStock = StockExists(strStock)
+    if (objStock = null) {
+      msg ("Stock " + strStock + " does not exist.")
+    }
+    intMax = Truncate(player.intCash / objStock.intPrice)
+    msg ("How many units to buy? (max: " + intMax + ")")
+    get input {
+      if (IsInt(result) = false) {
+        msg ("User cancel - unknown amount")
+      }
+      else {
+        intAmt = ToInt(result)
+        if (intAmt <= 0) {
+          msg ("Hmmm.. would you like to sell instead?")
+          msg ("User cancel")
+        }
+        else if (intAmt > intMax) {
+          msg ("User cancel - insufficient cash")
+        }
+        else {
+          StockBuy (player, objStock, intAmt)
+          msg ("Successful - it has been a pleasure!")
+          msg ("Your stock portfolio value is $" + StockPortfolio(player))
+        }
+      }
+    }
+  ]]></function>
+  <function name="StockExists" parameters="strStock" type="object"><![CDATA[
+    //
+    // Find stock
+    strFound = ""
+    intLoop = -1
+    foreach (strItem, game.arrStock) {
+      intLoop = intLoop + 1
+      if (strStock = strItem) {
+        strFound = strStock
+        intFound = intLoop
+      }
+    }
+    if (intFound < 0 ) {
+      return (null)
+    }
+    return (GetObject(strFound))
+  ]]></function>
+  <function name="StockBalance" parameters="strStock" type="int"><![CDATA[
+    //
+    // Find stock
+    strFound = ""
+    intLoop = -1
+    foreach (strItem, game.arrStock) {
+      intLoop = intLoop + 1
+      if (strStock = strItem) {
+        strFound = strStock
+        intFound = intLoop
+      }
+    }
+    if (intFound < 0 ) {
+      return (0)
+    }
+    strAmt = ListItem(player.arrStockOwned, intFound)
+    return (ToInt(strAmt))
+  ]]></function>
+  <function name="UserStockSell" parameters="strStock"><![CDATA[
+    objStock = StockExists(strStock)
+    if (objStock = null) {
+      msg ("Stock " + strStock + " does not exist.")
+    }
+    intMax = StockBalance(strStock)
+    msg ("How many units to sell? (max: " + intMax + ")")
+    get input {
+      if (IsInt(result) = false) {
+        msg ("User cancel - unknown amount")
+      }
+      else {
+        intAmt = ToInt(result)
+        if (intAmt <= 0) {
+          msg ("Hmmm.. would you like to buy instead?")
+          msg ("User cancel")
+        }
+        else if (intAmt > intMax) {
+          msg ("User cancel - insufficient shares")
+        }
+        else {
+          StockSell (player, objStock, intAmt)
+          msg ("Successful - it has been a pleasure!")
+          msg ("Your stock portfolio value is $" + StockPortfolio(player))
+        }
+      }
+    }
+  ]]></function>
+  <function name="StockSell" parameters="objPlayer, objStock, intUnit" type="boolean"><![CDATA[
+    //
+    // Find stock
+    strFound = ""
+    intLoop = -1
+    foreach (strStock, game.arrStock) {
+      intLoop = intLoop + 1
+      if (strStock = objStock.name) {
+        strFound = strStock
+        intFound = intLoop
+      }
+    }
+    if (intFound < 0 ) {
+      return (false)
+    }
+    //
+    // Assert shares is sufficient
+    intOwn = StockBalance(strStock)
+    if (intUnit > intOwn) {
+      return (false)
+    }
+    //
+    // Calculate total proceeds
+    intPrice = objStock.intPrice
+    intTotal = intUnit * intPrice
+    //
+    // Assert add proceeds to player
+    objPlayer.intCash = objPlayer.intCash + intTotal
+    //
+    // Assert remove StockOwned to player
+    strOwned = ListItem (objPlayer.arrStockOwned, intFound)
+    intOwned = ToInt(strOwned)
+    intOwned = intOwned - intUnit
+    ArrReplace (objPlayer.arrStockOwned, intOwned, intFound)
+    return (true)
+  ]]></function>
+  <function name="StockHigh" parameters="strStock" type="int"><![CDATA[
+    objStock = StockExists(strStock)
+    if (objStock = null) {
+      msg ("Stock " + strStock + " does not exist.")
+    }
+    intRet = objStock.intPrice
+    foreach (strPrice, objStock.arrPriceHistory) {
+      intPrice = ToInt(strPrice)
+      if (intPrice > intRet) {
+        intRet = intPrice
+      }
+    }
+    return (intRet)
+  ]]></function>
+  <function name="StockLow" parameters="strStock" type="int"><![CDATA[
+    objStock = StockExists(strStock)
+    if (objStock = null) {
+      msg ("Stock " + strStock + " does not exist.")
+    }
+    intRet = objStock.intPrice
+    foreach (strPrice, objStock.arrPriceHistory) {
+      intPrice = ToInt(strPrice)
+      if (intPrice < intRet) {
+        intRet = intPrice
+      }
+    }
+    return (intRet)
+  ]]></function>
+  <timer name="TimeDay">
+    <interval>18</interval>
+    <enabled type="boolean">false</enabled>
+    <script>
+      EndDayCloseRoom
+      EndDayPublish
+      msg ("-- NIGHT FALL --")
+      EnableTimer (TimeNight)
+      DisableTimer (TimeDay)
+      if (game.intDay = 7) {
+        DisableTimer (TimeNight)
+        DisableTimer (TimePeriod)
+        msg ("-- GAME END --")
+        msg ("Your portfolio value is $" + StockPortfolio(player))
+        msg ("Your bank balance is $" + player.intBankAccount)
+        msg ("Your cash is $" + player.intCash)
+      }
+    </script>
+  </timer>
+  <timer name="TimeNight">
+    <interval>9</interval>
+    <script>
+      EndNightSubscribe
+      EndNightOpenRoom
+      game.intDay = game.intDay + 1
+      msg ("-- DAY " + game.intDay + " --")
+      EnableTimer (TimeDay)
+      DisableTimer (TimeNight)
+      play sound ("chimes.wav", false, false)
+    </script>
+  </timer>
+  <timer name="TimePeriod">
+    <interval>81</interval>
+    <script>
+      EndPeriodSubscribe
+      game.intBankPeriod = game.intBankPeriod + 1
+      EndPeriodPublish
+    </script>
+  </timer>
+  <timer name="TimeStart">
+    <interval>1</interval>
+    <enabled />
+    <script>
+      //
+      // Assert - Set 99 to Debug
+      player.intGameLevel = 0
+      // Assert - TimeStart is executed once at start of game
+      // Assert - Set interval and enable global timers
+      // INT_BASE_INTERVAL = Number of seconds per night
+      game.INT_BASE_INTERVAL = 9
+      SetTimerInterval (TimeNight, game.INT_BASE_INTERVAL)
+      SetTimerInterval (TimeDay, game.INT_BASE_INTERVAL * 4)
+      SetTimerInterval (TimePeriod, game.INT_BASE_INTERVAL * 5 * 5)
+      EnableTimer (TimePeriod)
+      EnableTimer (TimeDay)
+      DisableTimer (TimeStart)
+      //
+      // Assert - Init global variables
+      game.intDay = 1
+      game.intBankPeriod = 1
+      game.intBankPeriodLength = 5
+      //
+      // Assert - Init objects
+      StockStart
+      //
+      // Assert - Init players
+      PlayerStart (benchmark, 20000)
+      PlayerStart (player, 10000)
+      //
+      // Assert - Benchmark stock index
+      foreach (strStock, game.arrStock) {
+        objStock = GetObject (strStock)
+        StockBuy (benchmark, objStock, 33)
+      }
+      objStock = GetObject ("Apple")
+      StockBuy (benchmark, objStock, 1)
+      MsgGame (99, "Benchmark Stock Index: " + StockPortfolio(benchmark))
+      //
+      // Assert - Benchmark bank index
+      BankDeposit (benchmark, 10000)
+      MsgGame (99, "Benchmark Bank Account: " + benchmark.intBankAccount)
+      MsgGame (99, "Benchmark Cash: " + benchmark.intCash)
+      //
+      // Optional - Create a lag
+      StockStartLag
+      //
+      // Assert - Publish random bank and sector rates
+      EndPeriodPublish
+    </script>
+  </timer>
+</asl>
